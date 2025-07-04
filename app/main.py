@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .api.v1.router import router as v1_router 
+from app.api.v1.router import api_router
 
 # TODO: 나중에 리드미 쓸 때 지울 것
 # 서버 실행 방법
@@ -10,4 +10,4 @@ from .api.v1.router import router as v1_router
 app = FastAPI()
 
 # API 라우터 확장
-app.include_router(v1_router, prefix="/api/v1")
+app.include_router(api_router, prefix="/api/v1")

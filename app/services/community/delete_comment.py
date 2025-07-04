@@ -9,23 +9,25 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-@router.delete("/users/{user_id}", response_class=JSONResponse)
-async def delete_user_info(user_id: int):
+
+#TODO eq 문장에 post_id도 반영하기
+@router.delete("posts/{post_id}/comments/{comment_id}", response_class=JSONResponse)
+async def delete_comment(comment_id: int):
     """
-    user_id로 유저를 삭제하는 API입니다. profiles 테이블에서 해당 id의 row를 삭제합니다.
+    comment_id로 댓글을 삭제하는 API입니다. comments 테이블에서 해당 id의 row를 삭제합니다.
     """
     try:
         response = (
             supabase
-            .table("profiles")
+            .table("comments")
             .delete()
-            .eq("id", user_id)
+            .eq("id", comment_id) 
             .execute()
         )
         if response.error:
             raise HTTPException(status_code=500, detail="DB 삭제 중 오류가 발생했습니다.")
         if response.count == 0:
-            raise HTTPException(status_code=404, detail="해당 user를 찾을 수 없습니다.")
-        return {"message": "유저가 성공적으로 삭제되었습니다."}
+            raise HTTPException(status_code=404, detail="해당 댓글을 찾을 수 없습니다.")
+        return {"message": "댓글이 성공적으로 삭제되었습니다."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

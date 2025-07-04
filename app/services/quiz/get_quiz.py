@@ -8,6 +8,8 @@ genai.configure(api_key=API_key)
 generation_config = genai.GenerationConfig(temparature=1, response_mime_type="application/json")
 model = genai.GenerativeModel('gemini-2.5-flash', generation_config=generation_config)
 
+
+#TODO -> O,X 형으로 변경하기. 변경하면 이 API 하나로 answer, explain까지 담당 가능
 def create_quiz_prompt():
     # 데이터베이스나 리스트에서 다양한 주제를 랜덤하게 선택
     topics_in_korean = [
