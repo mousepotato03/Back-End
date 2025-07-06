@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
-import os
 from supabase import create_client, Client
+from app.core.config import get_supabase_config
 
 router = APIRouter()
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+# Supabase 클라이언트 초기화
+SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 @router.delete("/users/{user_id}", response_class=JSONResponse)

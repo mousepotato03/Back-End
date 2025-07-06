@@ -1,5 +1,6 @@
 from google import genai
 from google.genai import types
+from app.core.config import get_gemini_api_key
 
 env_relation_response_schema = types.Schema(
     type="object",
@@ -12,6 +13,10 @@ env_relation_response_schema = types.Schema(
 
 
 def anl_env_relation(text: str):
+    # API key 설정
+    api_key = get_gemini_api_key()
+    genai.configure(api_key=api_key)
+    
     client = genai.Client()
     response = client.models.generate_content(
         model="gemini-2.0-flash-lite",

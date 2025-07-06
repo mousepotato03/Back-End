@@ -1,6 +1,7 @@
 from google import genai
 from google.genai import types
 import random
+from app.core.config import get_gemini_api_key
 
 # 1. response_schema 수정: 'key_concepts' 필드 추가
 article_with_concepts_schema = types.Schema(
@@ -32,6 +33,10 @@ def get_article_with_concepts():
     ]
 
     idea = random.choice(ARTICLE_IDEAS)
+    
+    # API key 설정
+    api_key = get_gemini_api_key()
+    genai.configure(api_key=api_key)
     
     client = genai.Client()
     response = client.models.generate_content(

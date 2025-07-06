@@ -11,22 +11,19 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-def validate_environment_variables() -> bool:
-    """.env 에서 Key, URL 가져와서 isset 검증"""
-    required_vars = {
-        "GEMINI_API_KEY": GEMINI_API_KEY,
-        "SUPABASE_URL": SUPABASE_URL,
-        "SUPABASE_KEY": SUPABASE_KEY
-    }
-    
-    missing_vars = [var for var, value in required_vars.items() if not value]
-    
-    if missing_vars:
-        print(f"경고: 다음 환경 변수가 설정되지 않았습니다: {', '.join(missing_vars)}")
-        return False
-    
-    return True
+def get_gemini_api_key() -> str:
+    """Gemini API key를 반환합니다."""
+    if not GEMINI_API_KEY:
+        raise ValueError("GEMINI_API_KEY가 설정되지 않았습니다.")
+    return GEMINI_API_KEY
+
+def get_supabase_config() -> tuple[str, str]:
+    """Supabase 설정을 반환합니다."""
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        raise ValueError("SUPABASE_URL 또는 SUPABASE_KEY가 설정되지 않았습니다.")
+    return SUPABASE_URL, SUPABASE_KEY
 
 # 환경 변수 검증 (개발 환경에서만)
 if os.getenv("ENVIRONMENT", "development") == "development":
-    validate_environment_variables()
+    get_gemini_api_key()
+    get_supabase_config()
