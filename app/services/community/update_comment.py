@@ -1,22 +1,22 @@
-from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException
 from supabase import create_client, Client
 from app.core.config import get_supabase_config
-
-router = APIRouter()
 
 # Supabase 클라이언트 초기화
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
-#TODO eq 문장에 post_id도 반영하기
-@router.put("posts/{post_id}/comments/{comment_id}", response_class=JSONResponse)
 async def update_comment(comment_id: int, content: str):
     """
     comment_id에 해당하는 댓글의 내용을 수정하는 API입니다.
+    params:
+        comment_id: int(required)
+        content: str(required)
     """
     try:
+        if not comment_id or not content:
+            raise HTTPException(status_code=400, detail="comment_id와 content는 필수입니다.")
         response = (
             supabase
             .table("comments")

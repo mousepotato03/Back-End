@@ -1,35 +1,30 @@
-from fastapi import APIRouter, HTTPException, Body
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException
 from supabase import create_client, Client
 from app.core.config import get_supabase_config
-from datetime import datetime, timezone
-
-router = APIRouter()
-
 # Supabase 클라이언트 초기화
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-@router.post("/posts/{post_id}/comments", response_class=JSONResponse)
 async def create_comment(
     post_id: int,
-    user_id: int = Body(..., embed=True),
-    content: str = Body(..., embed=True)
+    user_id: int,
+    content: str
 ):
     """
     특정 게시글에 새로운 댓글을 생성하는 API입니다.
+    params:
+        post_id: int(required)
+        user_id: int(required)
+        content: str(required)
     """
     try:
-        # 현재 시간을 created_at으로 설정
-        current_time = datetime.now(timezone.utc).isoformat()
-        
+        if not post_id or not user_id or not content:
+            raise HTTPException(status_code=400, detail="post_id, user_id, content는 필수입니다.")
+
         # 댓글 데이터 준비
         comment_data = {
             "post_id": post_id,
             "user_id": user_id,
             "content": content,
-            # "created_at": current_time,
-            # "updated_at": current_time
         }
             
         response = (

@@ -1,22 +1,21 @@
-from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException
 from supabase import create_client, Client
 from app.core.config import get_supabase_config
-
-router = APIRouter()
 
 # Supabase 클라이언트 초기화
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
-#TODO eq 문장에 post_id도 반영하기
-@router.delete("posts/{post_id}/comments/{comment_id}", response_class=JSONResponse)
 async def delete_comment(comment_id: int):
     """
     comment_id로 댓글을 삭제하는 API입니다. comments 테이블에서 해당 id의 row를 삭제합니다.
+    params: 
+        comment_id: int(required)
     """
     try:
+        if not comment_id:
+            raise HTTPException(status_code=400, detail="comment_id는 필수입니다.")
         response = (
             supabase
             .table("comments")

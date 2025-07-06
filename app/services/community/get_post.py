@@ -1,23 +1,28 @@
-from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException
 from supabase import create_client, Client
 from app.core.config import get_supabase_config
-
-router = APIRouter()
 
 # Supabase 클라이언트 초기화
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-@router.get("/posts", response_class=JSONResponse)
-async def get_posts():
+def get_posts(offset: int):
+    """
+    posts 테이블에서 10개의 게시글을 가져오는 함수입니다.
+    pagination을 위해 range를 사용합니다.
+    params:
+        offset: int(required)
+    """
     try:
         # posts 테이블에서 10개의 row를 가져옴
+        if not offset:
+            raise HTTPException(status_code=400, detail="offset는 필수입니다.")
+        limit = offset + 10
         response = (
             supabase
             .table("posts")
             .select("*")
-            .limit(10)
+            .range(offset, limit-1)  # range는 시작과 끝 인덱스를 포함
             .order("created_at", desc=True)
             .execute()
         )

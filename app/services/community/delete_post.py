@@ -1,19 +1,19 @@
-from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException
 from supabase import create_client, Client
 from app.core.config import get_supabase_config
-
-router = APIRouter()
 
 # Supabase 클라이언트 초기화
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-@router.delete("/posts/{post_id}", response_class=JSONResponse)
 async def delete_post(post_id: int):
     """
     post_id로 게시글을 삭제하는 API입니다. posts 테이블에서 해당 id의 row를 삭제합니다.
+
+    params:
+        post_id: int(required)
     """
+    if not post_id:
+        raise HTTPException(status_code=400, detail="post_id는 필수입니다.")
     try:
         response = (
             supabase
