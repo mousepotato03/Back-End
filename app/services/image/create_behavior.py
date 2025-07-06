@@ -10,7 +10,7 @@ SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 @router.post("/suggest_behavior", response_class=JSONResponse)
-async def create_suggest_behavior(
+async def create_user_behavior(
     user_id: int = Body(..., embed=True),
     content: str = Body(..., embed=True)
 ):
