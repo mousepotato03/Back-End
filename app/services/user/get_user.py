@@ -1,18 +1,14 @@
-from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException
 from supabase import create_client, Client
 from app.core.config import get_supabase_config
-
-router = APIRouter()
 
 # Supabase 클라이언트 초기화
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-@router.get("/users/{user_id}", response_class=JSONResponse)
-async def get_user(user_id: int):
+def get_user_info(user_id: int):
     """
-    user_id로 유저 정보를 조회하는 API입니다. profiles 테이블에서 해당 id의 row를 가져옵니다.
+    user_id로 유저 정보를 조회하는 함수입니다. profiles 테이블에서 해당 id의 row를 가져옵니다.
     """
     try:
         response = (
