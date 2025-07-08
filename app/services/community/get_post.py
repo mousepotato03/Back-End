@@ -21,7 +21,7 @@ def get_posts(offset: int):
         response = (
             supabase
             .table("posts")
-            .select("*")
+            .select("*, profile(user_img, username)")
             .range(offset, limit-1)  # range는 시작과 끝 인덱스를 포함
             .order("created_at", desc=True)
             .execute()
