@@ -1,28 +1,26 @@
 from fastapi import HTTPException
 from supabase import create_client, Client
+from uuid import UUID
 from app.core.config import get_supabase_config
 
 # Supabase 클라이언트 초기화
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-async def update_user_info(user_id: int, user_data: dict):
+async def update_user_info(user_id: UUID, user_data: dict):
     """
-    user_id로 유저 정보를 업데이트하는 API입니다. profiles 테이블에서 해당 id의 row를 수정합니다.
-    user_data는 업데이트할 필드와 값을 포함해야 합니다.
+    user_id로 유저 정보를 수정하는 함수입니다. profiles 테이블에서 해당 id의 row를 업데이트합니다.
     """
     try:
         response = (
             supabase
             .table("profiles")
             .update(user_data)
-            .eq("id", user_id)
+            .eq("id", str(user_id))
             .execute()
         )
-        if response.error:
-            raise HTTPException(status_code=500, detail="DB 업데이트 중 오류가 발생했습니다.")
-        if response.count == 0:
+        if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
             raise HTTPException(status_code=404, detail="해당 user를 찾을 수 없습니다.")
-        return {"message": "유저 정보가 성공적으로 업데이트되었습니다."}
+        return {"user": response.data[0] if isinstance(response.data, list) else response.data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

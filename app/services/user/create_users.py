@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 from supabase import create_client, Client
+from uuid import UUID
 from app.core.config import get_supabase_config
 
 # Supabase 클라이언트 초기화
@@ -37,11 +38,8 @@ async def create_user(user_data: dict):
             .insert(user_data)
             .execute()
         )
-        if response.error:
-            raise HTTPException(status_code=500, detail="DB에 유저 추가 중 오류가 발생했습니다.")
-
-        return {"message": "유저가 성공적으로 생성되었습니다.", "user": response.data[0]}
-    except HTTPException as e:
-        raise e
+        if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
+            raise HTTPException(status_code=500, detail="유저 생성에 실패했습니다.")
+        return {"user": response.data[0] if isinstance(response.data, list) else response.data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
