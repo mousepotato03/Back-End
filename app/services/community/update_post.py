@@ -35,11 +35,8 @@ async def update_post(
             .eq("id", post_id)
             .execute()
         )
-        if response.error:
-            raise HTTPException(status_code=500, detail="DB 수정 중 오류가 발생했습니다.")
-        updated_post = response.data
-        if not updated_post:
+        if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
             raise HTTPException(status_code=404, detail="해당 post를 찾을 수 없습니다.")
-        return {"updated_post": updated_post}
+        return {"post": response.data[0] if isinstance(response.data, list) else response.data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

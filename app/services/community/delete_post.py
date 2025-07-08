@@ -19,12 +19,10 @@ async def delete_post(post_id: int):
             supabase
             .table("posts")
             .delete()
-            .eq("id", post_id) 
+            .eq("id", post_id)
             .execute()
         )
-        if response.error:
-            raise HTTPException(status_code=500, detail="DB 삭제 중 오류가 발생했습니다.")
-        if response.count == 0:
+        if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
             raise HTTPException(status_code=404, detail="해당 게시글을 찾을 수 없습니다.")
         return {"message": "게시글이 성공적으로 삭제되었습니다."}
     except Exception as e:

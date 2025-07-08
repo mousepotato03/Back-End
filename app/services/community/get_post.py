@@ -15,18 +15,18 @@ def get_posts(offset: int):
     """
     try:
         # posts 테이블에서 10개의 row를 가져옴
-        if not offset:
+        if offset is None:
             raise HTTPException(status_code=400, detail="offset는 필수입니다.")
         limit = offset + 10
         response = (
             supabase
             .table("posts")
-            .select("*, profile(user_img, username)")
+            .select("*, profiles!posts_user_id_fkey(user_img, username)")
             .range(offset, limit-1)  # range는 시작과 끝 인덱스를 포함
             .order("created_at", desc=True)
             .execute()
         )
-        if response.error:
+        if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
             raise HTTPException(status_code=500, detail="DB 조회 중 오류가 발생했습니다.")
         posts = response.data
         return {"posts": posts}
