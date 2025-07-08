@@ -22,8 +22,3 @@ def get_supabase_config() -> tuple[str, str]:
     if not SUPABASE_URL or not SUPABASE_KEY:
         raise ValueError("SUPABASE_URL 또는 SUPABASE_KEY가 설정되지 않았습니다.")
     return SUPABASE_URL, SUPABASE_KEY
-
-# 환경 변수 검증 (개발 환경에서만)
-if os.getenv("ENVIRONMENT", "development") == "development":
-    get_gemini_api_key()
-    get_supabase_config()

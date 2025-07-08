@@ -5,39 +5,56 @@
 ## 프로젝트 구조
 
 ```
-backend/
+Back-End/
 ├── app/                      # FastAPI 소스코드의 메인 디렉토리
 │   ├── main.py               # FastAPI 앱의 시작점. 앱 인스턴스 생성, 미들웨어/라우터 포함
 │   ├── api/                  # API 엔드포인트(라우터)들을 모아두는 곳
+│   │   ├── util/             # API 유틸리티
+│   │   │   ├── exception.py  # API 예외 처리 함수 모음
+│   │   │   └── util.py       # 유틸리티 함수
 │   │   └── v1/               # API 버전 관리 (v1, v2 등)
 │   │       ├── router.py     # v1의 모든 엔드포인트 라우터들을 통합하는 파일
 │   │       └── endpoints/    # 기능별 엔드포인트 파일
 │   │           ├── __init__.py
 │   │           ├── users.py      # 사용자 프로필, 포인트 조회 등
 │   │           ├── verification.py # 3가지 인증 방식(사진, 퀴즈, 소감문) 처리
-│   │           ├── characters.py # AI 캐릭터 생성
-│   │           └── community.py  # 커뮤니티(게시글, 좋아요, 댓글)
+│   │           ├── character.py # AI 캐릭터 생성
+│   │           ├── community.py  # 커뮤니티(게시글, 좋아요, 댓글)
+│   │           └── leaderBoard.py # 리더보드 기능
 │   │
 │   ├── core/                 # 프로젝트의 핵심 설정
 │   │   └── config.py         # 환경변수, 시크릿 키 등 설정 관리
 │   │
-│   ├── services/             # 비즈니스 로직
-│   │   ├── generate/
-│   │   │   ├── character
-│   │   │   ├── article
-│   │   │   └── quiz
-│   │   └── verify/
-│   │   │   ├── image
-│   │   │   ├── article
-│   │   │   └── quiz
-│   │
-│   └── utils/                # 여러 곳에서 사용되는 유틸리티 함수
-│       ├── util.py
-│       └── exceptions.py     # 커스텀 예외 처리
+│   └── services/             # 비즈니스 로직
+│       ├── user/             # 사용자 관련 서비스
+│       │   ├── get_user.py
+│       │   ├── update_user.py
+│       │   └── delete_user.py
+│       ├── character/        # 캐릭터 관련 서비스
+│       │   ├── anl_txt.py
+│       │   └── env_relation_response.py
+│       ├── community/        # 커뮤니티 관련 서비스
+│       │   ├── create_post.py
+│       │   ├── get_post.py
+│       │   ├── update_post.py
+│       │   ├── delete_post.py
+│       │   ├── create_comment.py
+│       │   ├── get_comment.py
+│       │   ├── update_comment.py
+│       │   └── delete_comment.py
+│       ├── article/          # 소감문 관련 서비스
+│       │   ├── get_article.py
+│       │   └── verify_article.py
+│       ├── image/            # 이미지 관련 서비스
+│       │   ├── create_behavior.py
+│       │   └── verify_image.py
+│       ├── quiz/             # 퀴즈 관련 서비스
+│       │   └── get_quiz.py
+│       └── leaderBoard/      # 리더보드 관련 서비스
+│           └── get_ranking.py
 │
-├── .env                      # 환경변수 파일 (DB 접속 정보, API 키 등). 절대로 Git에 올리면 안 됨!
-├── .gitignore                # Git 추적 제외 목록
-└── requirements.txt          # 프로젝트 의존성 패키지 목록
+├── requirements.txt          # 프로젝트 의존성 패키지 목록
+└── README.md                # 프로젝트 문서
 ```
 
 ## 환경 변수 설정
@@ -46,7 +63,7 @@ backend/
 
 1. `.env` 파일을 생성하고 다음 환경 변수들을 설정하세요:
 
-````bash
+```bash
 # API Keys
 GEMINI_API_KEY=your_gemini_api_key_here
 SUPABASE_URL=your_supabase_url_here
@@ -54,6 +71,7 @@ SUPABASE_KEY=your_supabase_key_here
 
 # Environment
 ENVIRONMENT=development
+```
 
 ## 설치 및 실행
 
@@ -65,7 +83,7 @@ pip install -r requirements.txt
 
 # 개발 서버 실행
 uvicorn app.main:app --reload
-````
+```
 
 ## API 문서
 
@@ -73,6 +91,15 @@ uvicorn app.main:app --reload
 
 - Swagger UI: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
+
+## 주요 기능
+
+- **사용자 관리**: 사용자 프로필, 포인트 시스템
+- **인증 시스템**: 사진, 퀴즈, 소감문을 통한 환경 보호 활동 인증
+- **AI 캐릭터**: 환경 관련 AI 캐릭터 생성 및 상호작용
+- **커뮤니티**: 게시글 작성, 댓글, 좋아요 기능
+- **리더보드**: 사용자 랭킹 시스템
+- **이미지 처리**: 환경 보호 활동 이미지 검증
 
 ## 보안
 
