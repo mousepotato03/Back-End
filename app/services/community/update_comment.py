@@ -24,10 +24,8 @@ async def update_comment(comment_id: int, content: str):
             .eq("id", comment_id)
             .execute()
         )
-        if response.error:
-            raise HTTPException(status_code=500, detail="DB 수정 중 오류가 발생했습니다.")
-        if response.count == 0:
+        if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
             raise HTTPException(status_code=404, detail="해당 댓글을 찾을 수 없습니다.")
-        return {"message": "댓글이 성공적으로 수정되었습니다."}
+        return {"comment": response.data[0] if isinstance(response.data, list) else response.data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

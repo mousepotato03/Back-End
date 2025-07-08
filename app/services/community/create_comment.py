@@ -34,14 +34,10 @@ async def create_comment(
             .execute()
         )
         
-        if response.error:
-            raise HTTPException(status_code=500, detail="DB 생성 중 오류가 발생했습니다.")
-        
-        created_comment = response.data[0] if response.data else None
-        if not created_comment:
+        if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
             raise HTTPException(status_code=500, detail="댓글 생성에 실패했습니다.")
-            
-        return {"message": "댓글이 성공적으로 생성되었습니다.", "comment": created_comment}
+        
+        return {"comment": response.data[0] if isinstance(response.data, list) else response.data}
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) 

@@ -20,10 +20,10 @@ def get_comments(post_id: int):
             .table("comments")
             .select("*")
             .eq("post_id", post_id)
-            .order("created_at", desc=False)
+            .order("created_at", desc=True)
             .execute()
         )
-        if response.error:
+        if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
             raise HTTPException(status_code=500, detail="DB 조회 중 오류가 발생했습니다.")
         comments = response.data
         return {"comments": comments}
