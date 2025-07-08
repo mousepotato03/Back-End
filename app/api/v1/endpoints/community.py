@@ -71,12 +71,12 @@ async def get_post_comments(post_id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/posts/{post_id}/comments")
-async def create_post_comment(post_id: int, user_id: int, comment_data: str):
+async def create_post_comment(comment_data: dict):
     """
     특정 게시글에 새로운 댓글을 생성합니다.
     """
     try:
-        return create_comment(post_id, user_id, comment_data)
+        return create_comment(comment_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
