@@ -1,15 +1,11 @@
-from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException
 from supabase import create_client, Client
 from app.core.config import get_supabase_config
-
-router = APIRouter()
 
 # Supabase 클라이언트 초기화
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-@router.put("/users/{user_id}", response_class=JSONResponse)
 async def update_user_info(user_id: int, user_data: dict):
     """
     user_id로 유저 정보를 업데이트하는 API입니다. profiles 테이블에서 해당 id의 row를 수정합니다.

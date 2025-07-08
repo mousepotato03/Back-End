@@ -2,8 +2,19 @@ from fastapi import APIRouter, HTTPException
 from app.services.user.get_user import get_user_info
 from app.services.user.update_user import update_user_info
 from app.services.user.delete_user import delete_user_info
+from app.services.user.create_users import create_user
 
 router = APIRouter()
+
+@router.post("/{user_id}")
+async def create_user(user_data: dict):
+    """
+    새로운 사용자를 생성합니다.
+    """
+    try:
+        return create_user(user_data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/{user_id}")
 async def get_user(user_id: int):
