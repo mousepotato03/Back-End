@@ -71,32 +71,32 @@ async def get_post_comments(post_id: int):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/posts/{post_id}/comments")
-async def create_post_comment(comment_data: dict):
+async def create_post_comment(post_id: int, comment_data: dict):
     """
     특정 게시글에 새로운 댓글을 생성합니다.
     """
     try:
-        return create_comment(comment_data)
+        return create_comment(post_id, comment_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.put("/posts/{post_id}/comments/{comment_id}")
-async def update_post_comment(comment_id: int, comment_data: str):
+async def update_post_comment(post_id: int, comment_id: int, comment_data: str):
     """
     댓글을 수정합니다.
     """
     try:
-        return update_comment(comment_id, comment_data)
+        return update_comment(post_id, comment_id, comment_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/posts/{post_id}/comments/{comment_id}")
-async def delete_post_comment(comment_id: int):
+async def delete_post_comment(post_id: int, comment_id: int):
     """
     댓글을 삭제합니다.
     """
     try:
-        return delete_comment(comment_id)
+        return delete_comment(post_id, comment_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
