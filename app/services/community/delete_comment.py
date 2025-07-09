@@ -7,7 +7,7 @@ SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
-async def delete_comment(comment_id: int):
+async def delete_comment(post_id: int, comment_id: int):
     """
     comment_id로 댓글을 삭제하는 API입니다. comments 테이블에서 해당 id의 row를 삭제합니다.
     params: 

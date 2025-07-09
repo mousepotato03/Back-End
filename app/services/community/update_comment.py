@@ -7,7 +7,7 @@ SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
-async def update_comment(comment_id: int, content: str):
+async def update_comment(post_id: int, comment_id: int, content: str):
     """
     comment_id에 해당하는 댓글의 내용을 수정하는 API입니다.
     params:

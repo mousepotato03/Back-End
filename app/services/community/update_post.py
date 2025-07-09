@@ -26,6 +26,7 @@ async def update_post(
         update_data = {
             "title": post_data["title"],
             "content": post_data["content"],
+            "likes_count": post_data["likes_count"],
             "image_url": post_data["image_url"]
         }
         response = (

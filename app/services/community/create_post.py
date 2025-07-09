@@ -41,6 +41,6 @@ def create_post(post_data: dict):
         
         if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
             raise HTTPException(status_code=500, detail="게시글 생성에 실패했습니다.")
-        return {"message": "게시글 생성에 성공했습니다."}
+        return {"post": response.data[0] if isinstance(response.data, list) else response.data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) 
