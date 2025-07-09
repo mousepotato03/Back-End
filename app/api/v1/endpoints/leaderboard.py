@@ -3,7 +3,7 @@ from app.services.leaderBoard.get_ranking import get_leaderboard
 
 router = APIRouter()
 
-@router.get("/leaderBoard")
+@router.get("/ranking")
 async def get_leaderboard_ranking():
     """
     리더보드 순위를 가져옵니다.
