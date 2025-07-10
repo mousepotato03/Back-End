@@ -23,5 +23,9 @@ app.add_middleware(
   allow_headers=["*"] #모든 HTTP 헤더 allow
 )
 
+@app.get("/")
+async def root():
+    return {"message": "hello world"}
+
 # API 라우터 확장
 app.include_router(router, prefix="/api/v1")
