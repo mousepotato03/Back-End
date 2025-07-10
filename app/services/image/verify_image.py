@@ -12,7 +12,7 @@ env_relation_response_schema = types.Schema(
 )
 
 
-def verify_image_upload(text: str):
+async def verify_image_upload(text: str):
     # API key 설정
     api_key = get_gemini_api_key()
     client = genai.Client(api_key=api_key)

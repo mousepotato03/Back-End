@@ -15,7 +15,7 @@ quiz_ox_response_schema = types.Schema(
     required=["question", "options", "answer", "explanation"],
 )
 
-def create_OX_quiz():
+async def create_OX_quiz():
     """AI가 자율적으로 주제를 선택하여 O/X 퀴즈를 생성합니다."""
     
     # API key 설정

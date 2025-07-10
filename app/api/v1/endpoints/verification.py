@@ -8,16 +8,16 @@ from app.services.quiz.create_quiz import create_OX_quiz
 
 router = APIRouter()
 
-@router.post("/image")
-async def verify_image(image_data: dict):
-    """
-    이미지 업로드를 검증합니다.
-    """
-    try:
-        result = verify_image_upload(image_data)
-        return {"result": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+# @router.post("/image")
+# async def verify_image(image_data: dict):
+#     """
+#     이미지 업로드를 검증합니다.
+#     """
+#     try:
+#         result = await verify_image_upload(image_data)
+#         return {"result": result}
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/behavior")
 async def create_behavior(user_id: UUID, content: str):
@@ -25,7 +25,7 @@ async def create_behavior(user_id: UUID, content: str):
     이미지 인증 행동을 추가 요청합니다.
     """
     try:
-        result = create_user_behavior(user_id, content)
+        result = await create_user_behavior(user_id, content)
         return {"result": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -36,7 +36,7 @@ async def create_quiz():
     O/X 퀴즈를 생성합니다.
     """
     try:
-        result = create_OX_quiz(user_id)
+        result = await create_OX_quiz()
         return {"result": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

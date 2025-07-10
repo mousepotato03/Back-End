@@ -7,7 +7,7 @@ from app.core.config import get_supabase_config
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-def get_user_info(user_id: UUID):
+async def get_user_info(user_id: UUID):
     """
     user_id로 유저 정보를 조회하는 함수입니다. profiles 테이블에서 해당 id의 row를 가져옵니다.
     """

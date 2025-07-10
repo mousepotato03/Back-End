@@ -18,7 +18,7 @@ article_with_concepts_schema = types.Schema(
     required=["title", "article_text", "key_concepts"],
 )
 
-def get_article_with_concepts():
+async def get_article_with_concepts():
     ARTICLE_IDEAS = [
         {'topic': 'Single-Use Plastics', 'angle': 'The surprising journey of a plastic bottle after you throw it away, and why choosing a reusable tumbler matters.'},
         {'topic': 'Fast Fashion', 'angle': 'The hidden environmental cost behind a $10 t-shirt and how "slow fashion" can save your wallet and the planet.'},

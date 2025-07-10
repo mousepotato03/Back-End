@@ -12,7 +12,7 @@ env_relation_response_schema = types.Schema(
 )
 
 
-def anl_env_relation(text: str):
+async def anl_env_relation(text: str):
     # API key 설정
     api_key = get_gemini_api_key()
     client = genai.Client(api_key=api_key)

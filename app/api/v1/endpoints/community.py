@@ -20,7 +20,7 @@ async def get_community_posts(offset: int):
     커뮤니티 게시글 목록을 가져옵니다.
     """
     try:
-        return get_posts(offset=offset)
+        return await get_posts(offset=offset)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -30,7 +30,7 @@ async def create_community_post(post_data: dict):
     새로운 커뮤니티 게시글을 생성합니다.
     """
     try:
-        return create_post(post_data)
+        return await create_post(post_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -40,7 +40,7 @@ async def update_community_post(post_id: int, post_data: dict):
     커뮤니티 게시글을 수정합니다.
     """
     try:
-        return update_post(post_id, post_data)
+        return await update_post(post_id, post_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -50,7 +50,7 @@ async def delete_community_post(post_id: int):
     커뮤니티 게시글을 삭제합니다.
     """
     try:
-        return delete_post(post_id)
+        return await delete_post(post_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 # -----------------------
@@ -66,7 +66,7 @@ async def get_post_comments(post_id: int):
     특정 게시글의 댓글 목록을 가져옵니다.
     """
     try:
-        return get_comments(post_id)
+        return await get_comments(post_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -76,7 +76,7 @@ async def create_post_comment(post_id: int, comment_data: dict):
     특정 게시글에 새로운 댓글을 생성합니다.
     """
     try:
-        return create_comment(post_id, comment_data)
+        return await create_comment(post_id, comment_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -86,7 +86,7 @@ async def update_post_comment(post_id: int, comment_id: int, comment_data: str):
     댓글을 수정합니다.
     """
     try:
-        return update_comment(post_id, comment_id, comment_data)
+        return await update_comment(post_id, comment_id, comment_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -96,7 +96,7 @@ async def delete_post_comment(post_id: int, comment_id: int):
     댓글을 삭제합니다.
     """
     try:
-        return delete_comment(post_id, comment_id)
+        return await delete_comment(post_id, comment_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

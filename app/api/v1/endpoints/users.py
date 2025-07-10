@@ -13,7 +13,7 @@ async def create_user(user_data: dict):
     새로운 사용자를 생성합니다.
     """
     try:
-        return create_user(user_data)
+        return await create_user(user_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -23,7 +23,7 @@ async def get_user(user_id: UUID):
     특정 사용자의 정보를 가져옵니다.
     """
     try:
-        return get_user_info(user_id)
+        return await get_user_info(user_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -33,7 +33,7 @@ async def update_user(user_id: UUID, user_data: dict):
     사용자 정보를 수정합니다.
     """
     try:
-        return update_user_info(user_id, user_data)
+        return await update_user_info(user_id, user_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -43,6 +43,6 @@ async def delete_user(user_id: UUID):
     사용자를 삭제합니다.
     """
     try:
-        return delete_user_info(user_id)
+        return await delete_user_info(user_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

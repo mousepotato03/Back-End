@@ -10,7 +10,7 @@ async def environment_relation_check(text: str):
     환경과 관계가 있는지 판단합니다.
     """
     try:
-        result = anl_env_relation(text)
+        result = await anl_env_relation(text)
         return {"result": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

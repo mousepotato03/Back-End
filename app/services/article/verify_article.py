@@ -13,7 +13,7 @@ similarity_model = SentenceTransformer('jhgan/ko-sroberta-multitask')
 router = APIRouter()
 
 # --- 검증 로직 함수 ---
-def verify_summary(summary: str, concepts: list[str], threshold: float = 0.5) -> bool:
+async def verify_summary(summary: str, concepts: list[str], threshold: float = 0.5) -> bool:
     """사용자 소감문이 핵심 개념 중 하나 이상과 의미적으로 유사한지 검증합니다."""
     if not summary or not concepts:
         return False

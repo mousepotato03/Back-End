@@ -6,7 +6,7 @@ from app.core.config import get_supabase_config
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-def get_leaderboard():
+async def get_leaderboard():
     """
     profiles 테이블에서 포인트 기준 상위 50명의 리더보드를 가져오는 함수입니다.
     """
