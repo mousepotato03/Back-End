@@ -1,17 +1,14 @@
-from fastapi import APIRouter, HTTPException, Body
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException, Body
 from supabase import create_client, Client
+from uuid import UUID
 from app.core.config import get_supabase_config
-
-router = APIRouter()
 
 # Supabase 클라이언트 초기화
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-@router.post("/suggest_behavior", response_class=JSONResponse)
 async def create_user_behavior(
-    user_id: int = Body(..., embed=True),
+    user_id: UUID = Body(..., embed=True),
     content: str = Body(..., embed=True)
 ):
     """

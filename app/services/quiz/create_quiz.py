@@ -1,6 +1,7 @@
 from google import genai
 from google.genai import types
 from app.core.config import get_gemini_api_key
+# from uuid import UUID
 
 # O/X 퀴즈 응답을 위한 JSON 스키마 정의
 quiz_ox_response_schema = types.Schema(
@@ -14,16 +15,15 @@ quiz_ox_response_schema = types.Schema(
     required=["question", "options", "answer", "explanation"],
 )
 
-def get_ox_quiz():
+def create_OX_quiz():
     """AI가 자율적으로 주제를 선택하여 O/X 퀴즈를 생성합니다."""
     
     # API key 설정
     api_key = get_gemini_api_key()
     genai.configure(api_key=api_key)
-    
     client = genai.Client()
     response = client.models.generate_content(
-        model="gemini-2.5-flash",  # 혹은 사용 가능한 최신 모델
+        model="gemini-2.5-flash", 
         contents="Generate one O/X quiz now.",
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
