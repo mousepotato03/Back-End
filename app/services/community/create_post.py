@@ -7,7 +7,7 @@ SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 #TODO return data에 post data 제외하고 메시지만 반환
-def create_post(post_data: dict):
+async def create_post(post_data: dict):
     """
     새로운 게시글을 생성하는 함수입니다.
     

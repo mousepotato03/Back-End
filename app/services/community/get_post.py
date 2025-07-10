@@ -6,7 +6,7 @@ from app.core.config import get_supabase_config
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-def get_posts(offset: int):
+async def get_posts(offset: int):
     """
     posts 테이블에서 10개의 게시글을 가져오는 함수입니다.
     pagination을 위해 range를 사용합니다.

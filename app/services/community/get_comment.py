@@ -6,7 +6,7 @@ from app.core.config import get_supabase_config
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-def get_comments(post_id: int):
+async def get_comments(post_id: int):
     """
     특정 post_id에 해당하는 comment들을 가져오는 API입니다.
     params:

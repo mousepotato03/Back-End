@@ -4,6 +4,7 @@ from app.core.config import get_supabase_config
 # Supabase 클라이언트 초기화
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 async def create_comment(post_id: int, comment_data: dict):
     """ 
     특정 게시글에 새로운 댓글을 생성하는 API입니다.
