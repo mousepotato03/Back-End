@@ -34,7 +34,7 @@ async def update_comment(post_id: int, comment_id: int, content: str):
         select_response = (
             supabase
             .table("comments")
-            .select("*, profiles!posts_user_id_fkey(user_img, username)")
+            .select("*, profiles!comment_user_id_fkey(user_img, username)")
             .eq("id", comment_id)
             .execute()
         )

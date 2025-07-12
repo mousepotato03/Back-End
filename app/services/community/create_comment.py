@@ -43,7 +43,7 @@ async def create_comment(post_id: int, comment_data: dict):
         select_response = (
             supabase
             .table("comments")
-            .select("*, profiles!posts_user_id_fkey(user_img, username)")
+            .select("*, profiles!comment_user_id_fkey(user_img, username)")
             .eq("id", created_comment_id)
             .execute()
         )

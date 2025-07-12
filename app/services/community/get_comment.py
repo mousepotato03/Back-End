@@ -31,7 +31,7 @@ async def get_comments(post_id: int):
         response = (
             supabase
             .table("comments")
-            .select("*, profiles!posts_user_id_fkey(user_img, username)")
+            .select("*, profiles!comment_user_id_fkey(user_img, username)")
             .eq("post_id", post_id)
             .order("created_at", desc=True)
             .execute()
