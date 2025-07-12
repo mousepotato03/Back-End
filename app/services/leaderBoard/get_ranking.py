@@ -15,8 +15,8 @@ async def get_leaderboard():
         response = (
             supabase
             .table("profiles")
-            .select("id, user_points, continuous_days, profile_image_url, profile")
-            .order("user_points", desc=True)
+            .select("id, username, total_points, continuous_days, user_img")
+            .order("total_points", desc=True)
             .limit(50)
             .execute()
         )
