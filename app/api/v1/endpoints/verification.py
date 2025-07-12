@@ -1,6 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from uuid import UUID
-from app.services.image.verify_image import verify_image_upload
+from app.services.image.verify_image import verify_image_by_category
 from app.services.image.create_behavior import create_user_behavior
 from app.services.quiz.create_quiz import create_OX_quiz
 # from app.services.article.verify_article import verify_summary
@@ -18,6 +18,53 @@ router = APIRouter()
 #         return {"result": result}
 #     except Exception as e:
 #         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/image")
+async def verify_image_by_category_endpoint(
+    image: UploadFile = File(...),
+    main_category_index: int = Form(...),
+    sub_category_index: int = Form(...)
+):
+    """
+    프론트엔드에서 업로드한 이미지와 카테고리 인덱스를 기반으로 이미지를 검증합니다.
+    """
+    try:
+        # 이미지 파일 검증
+        if not image.content_type.startswith('image/'):
+            raise HTTPException(
+                status_code=400,
+                detail="유효한 이미지 파일이 아닙니다. (지원 형식: JPEG, PNG)"
+            )
+            
+        # 이미지 크기 제한 (예: 10MB)
+        MAX_IMAGE_SIZE = 10 * 1024 * 1024  # 10MB in bytes
+        image_data = await image.read()
+        if len(image_data) > MAX_IMAGE_SIZE:
+            raise HTTPException(
+                status_code=400,
+                detail="이미지 크기가 너무 큽니다. 최대 10MB까지 허용됩니다."
+            )
+            
+        # 타입 검증
+        if not isinstance(main_category_index, int):
+            raise HTTPException(status_code=400, detail="main_category_index는 정수여야 합니다.")
+        
+        if not isinstance(sub_category_index, int):
+            raise HTTPException(status_code=400, detail="sub_category_index는 정수여야 합니다.")
+        
+        # 이미지 검증 서비스 호출
+        result = await verify_image_by_category(
+            image_bytes=image_data,
+            main_category_index=main_category_index,
+            sub_category_index=sub_category_index
+        )
+        
+        return {"result": result}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/behavior")
 async def create_behavior(user_id: UUID, content: str):
