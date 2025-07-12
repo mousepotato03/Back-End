@@ -24,19 +24,34 @@ async def create_comment(post_id: int, comment_data: dict):
             "content": comment_data["content"],
         }
             
-        response = (
+        # 1단계: INSERT만 실행
+        insert_response = (
             supabase
             .table("comments")
             .insert(new_comment_data)
-            .select("*, profiles!posts_user_id_fkey(user_img, username)")
             .execute()
         )
         
         # response 데이터 검증
-        if not response.data or len(response.data) == 0:
+        if not insert_response.data or len(insert_response.data) == 0:
             raise HTTPException(status_code=500, detail="댓글 생성에 실패했습니다.")
 
-        created_comment = response.data[0]
+        # 생성된 댓글의 ID 추출
+        created_comment_id = insert_response.data[0]["id"]
+        
+        # 2단계: 별도 SELECT 쿼리로 프로필 정보와 함께 조회
+        select_response = (
+            supabase
+            .table("comments")
+            .select("*, profiles!posts_user_id_fkey(user_img, username)")
+            .eq("id", created_comment_id)
+            .execute()
+        )
+        
+        if not select_response.data or len(select_response.data) == 0:
+            raise HTTPException(status_code=500, detail="생성된 댓글 조회에 실패했습니다.")
+
+        created_comment = select_response.data[0]
         
         # 생성된 comment 데이터 반환 (get_comment와 동일한 형식)
         return {"comment": created_comment}

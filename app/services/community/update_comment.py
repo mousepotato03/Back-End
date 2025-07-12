@@ -17,21 +17,33 @@ async def update_comment(post_id: int, comment_id: int, content: str):
     if not comment_id or not content:
         raise HTTPException(status_code=400, detail="comment_id와 content는 필수입니다.")
     try:
-        response = (
+        # 1단계: UPDATE만 실행
+        update_response = (
             supabase
             .table("comments")
             .update({"content": content})
             .eq("id", comment_id)
-            .select("*, profiles!posts_user_id_fkey(user_img, username)")
             .execute()
         )
         
         # response 데이터 검증
-        if not response.data or len(response.data) == 0:
+        if not update_response.data or len(update_response.data) == 0:
             raise HTTPException(status_code=404, detail="해당 댓글을 찾을 수 없습니다.")
         
+        # 2단계: 별도 SELECT 쿼리로 프로필 정보와 함께 조회
+        select_response = (
+            supabase
+            .table("comments")
+            .select("*, profiles!posts_user_id_fkey(user_img, username)")
+            .eq("id", comment_id)
+            .execute()
+        )
+        
+        if not select_response.data or len(select_response.data) == 0:
+            raise HTTPException(status_code=500, detail="수정된 댓글 조회에 실패했습니다.")
+        
         # 수정된 comment 데이터 반환 (get_comment와 동일한 형식)
-        updated_comment = response.data[0]
+        updated_comment = select_response.data[0]
         return {"comment": updated_comment}
         
     except HTTPException:

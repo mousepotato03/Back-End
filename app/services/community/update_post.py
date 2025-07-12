@@ -30,19 +30,32 @@ async def update_post(post_id: int, post_data: dict):
         if "image_url" in post_data and post_data["image_url"] is not None:
             update_data["image_url"] = post_data["image_url"]
 
-        response = (
+        # 1단계: UPDATE만 실행
+        update_response = (
             supabase
             .table("posts")
             .update(update_data)
             .eq("id", post_id)
-            .select("*, profiles!posts_user_id_fkey(user_img, username)")
             .execute()
         )
-        if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
+        
+        if not update_response.data or (isinstance(update_response.data, list) and len(update_response.data) == 0):
             raise HTTPException(status_code=404, detail="해당 post를 찾을 수 없습니다.")
         
+        # 2단계: 별도 SELECT 쿼리로 프로필 정보와 함께 조회
+        select_response = (
+            supabase
+            .table("posts")
+            .select("*, profiles!posts_user_id_fkey(user_img, username)")
+            .eq("id", post_id)
+            .execute()
+        )
+        
+        if not select_response.data or (isinstance(select_response.data, list) and len(select_response.data) == 0):
+            raise HTTPException(status_code=500, detail="수정된 게시글 조회에 실패했습니다.")
+        
         # 수정된 post 데이터 반환 (get_post와 동일한 형식)
-        updated_post = response.data[0] if isinstance(response.data, list) else response.data
+        updated_post = select_response.data[0] if isinstance(select_response.data, list) else select_response.data
         return {"post": updated_post}
         
     except Exception as e:
