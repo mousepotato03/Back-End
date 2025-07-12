@@ -27,7 +27,7 @@ async def create_post(post_data: dict):
         }
         
         # 선택적 필드들 추가
-        if "image_url" in post_data:
+        if "image_url" in post_data and post_data["image_url"] is not None:
             insert_data["image_url"] = post_data["image_url"]
             
         response = (

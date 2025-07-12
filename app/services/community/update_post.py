@@ -24,8 +24,12 @@ async def update_post(post_id: int, post_data: dict):
             "title": post_data["title"],
             "content": post_data["content"],
             "likes_count": post_data["likes_count"],
-            "image_url": post_data["image_url"]
         }
+        
+        # image_url이 None이 아닐 때만 추가
+        if "image_url" in post_data and post_data["image_url"] is not None:
+            update_data["image_url"] = post_data["image_url"]
+
         response = (
             supabase
             .table("posts")
