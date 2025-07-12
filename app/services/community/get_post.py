@@ -27,7 +27,7 @@ async def get_posts(offset: int):
             .execute()
         )
         if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
-            raise HTTPException(status_code=500, detail="DB 조회 중 오류가 발생했습니다.")
+            return {"posts": []}
         posts = response.data
         return {"posts": posts}
     except Exception as e:
