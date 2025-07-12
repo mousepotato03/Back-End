@@ -7,20 +7,12 @@ from app.core.config import get_supabase_config
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-async def create_user_behavior(
-    user_id: UUID = Body(..., embed=True),
-    content: str = Body(..., embed=True)
-):
+async def create_user_behavior(behavior_data: dict):
     """
     suggest_behavior 테이블에 새로운 행동 제안을 생성하는 API입니다.
     """
     try:
-        # 행동 제안 데이터 준비
-        behavior_data = {
-            "user_id": user_id,
-            "content": content
-        }
-            
+        # 행동 제안 데이터 준비            
         response = (
             supabase
             .table("suggest_behavior")

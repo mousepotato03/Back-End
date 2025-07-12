@@ -67,12 +67,12 @@ async def verify_image_by_category_endpoint(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/behavior")
-async def create_behavior(user_id: UUID, content: str):
+async def create_behavior(verification_behavior: dict):
     """
     이미지 인증 행동을 추가 요청합니다.
     """
     try:
-        result = await create_user_behavior(user_id, content)
+        result = await create_user_behavior(verification_behavior)
         return {"result": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

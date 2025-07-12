@@ -7,11 +7,10 @@ quiz_ox_response_schema = types.Schema(
     type="object",
     properties={
         "question": types.Schema(type="string", description="The O/X quiz statement in Korean."),
-        "options": types.Schema(type="array", items=types.Schema(type="string")),
         "answer": types.Schema(type="string", description="The correct answer, either 'O' or 'X'."),
         "explanation": types.Schema(type="string", description="A brief explanation in Korean."),
     },
-    required=["question", "options", "answer", "explanation"],
+    required=["question", "answer", "explanation"],
 )
 
 system_prompt="""
