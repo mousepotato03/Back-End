@@ -12,20 +12,35 @@ async def get_comments(post_id: int):
     params:
         post_id: int(required)
     """
+    if not post_id:
+        raise HTTPException(status_code=400, detail="post_id는 필수입니다.")
     try:
-        if not post_id:
-            raise HTTPException(status_code=400, detail="post_id는 필수입니다.")
+        # 먼저 post가 존재하는지 확인
+        post_response = (
+            supabase
+            .table("posts")
+            .select("id")
+            .eq("id", post_id)
+            .execute()
+        )
+        
+        if not post_response.data or len(post_response.data) == 0:
+            raise HTTPException(status_code=404, detail="해당 게시글을 찾을 수 없습니다.")
+        
+        # 댓글 조회
         response = (
             supabase
             .table("comments")
-            .select("*")
+            .select("*, profiles!posts_user_id_fkey(user_img, username)")
             .eq("post_id", post_id)
             .order("created_at", desc=True)
             .execute()
         )
-        if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
-            raise HTTPException(status_code=500, detail="DB 조회 중 오류가 발생했습니다.")
-        comments = response.data
+        
+        comments = response.data if response.data else []
         return {"comments": comments}
+        
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -13,10 +13,10 @@ async def get_posts(offset: int):
     params:
         offset: int(required)
     """
+     # posts 테이블에서 10개의 row를 가져옴
+    if offset is None:
+        raise HTTPException(status_code=400, detail="offset는 필수입니다.")
     try:
-        # posts 테이블에서 10개의 row를 가져옴
-        if offset is None:
-            raise HTTPException(status_code=400, detail="offset는 필수입니다.")
         limit = offset + 10
         response = (
             supabase

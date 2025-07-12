@@ -6,10 +6,7 @@ from app.core.config import get_supabase_config
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-async def update_post(
-    post_id: int,
-    post_data: dict
-):
+async def update_post(post_id: int, post_data: dict):
     """
     기존 post의 title, content, image_url만 수정하는 API입니다.
 
@@ -34,10 +31,15 @@ async def update_post(
             .table("posts")
             .update(update_data)
             .eq("id", post_id)
+            .select("*, profiles!posts_user_id_fkey(user_img, username)")
             .execute()
         )
         if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
             raise HTTPException(status_code=404, detail="해당 post를 찾을 수 없습니다.")
-        return {"post": response.data[0] if isinstance(response.data, list) else response.data}
+        
+        # 수정된 post 데이터 반환 (get_post와 동일한 형식)
+        updated_post = response.data[0] if isinstance(response.data, list) else response.data
+        return {"post": updated_post}
+        
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

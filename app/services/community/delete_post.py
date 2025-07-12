@@ -5,6 +5,7 @@ from app.core.config import get_supabase_config
 # Supabase 클라이언트 초기화
 SUPABASE_URL, SUPABASE_KEY = get_supabase_config()
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 async def delete_post(post_id: int):
     """
     post_id로 게시글을 삭제하는 API입니다. posts 테이블에서 해당 id의 row를 삭제합니다.
