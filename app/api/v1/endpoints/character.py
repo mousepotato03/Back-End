@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.services.character.anl_txt import anl_env_relation
+from app.services.character.verify_text import anl_env_relation
 # from app.services.character.env_relation_response import generate_character_response
 
 router = APIRouter()
