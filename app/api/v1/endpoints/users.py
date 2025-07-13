@@ -7,7 +7,7 @@ from app.services.user.create_users import create_user
 
 router = APIRouter()
 
-@router.post("/{user_id}")
+@router.post("/")
 async def create_user(user_data: dict):
     """
     새로운 사용자를 생성합니다.

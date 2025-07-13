@@ -40,6 +40,26 @@ async def create_user(user_data: dict):
         )
         if not response.data or (isinstance(response.data, list) and len(response.data) == 0):
             raise HTTPException(status_code=500, detail="유저 생성에 실패했습니다.")
-        return {"user": response.data[0] if isinstance(response.data, list) else response.data}
+
+        # 생성된 유저의 ID 추출
+        created_user_id = response.data[0]["id"]
+        
+        # 2단계: 별도 SELECT 쿼리로 프로필 정보와 함께 조회
+        select_response = (
+            supabase
+            .table("profiles")
+            .select("*")
+            .eq("id", created_user_id)
+            .execute()
+        )
+        
+        if not select_response.data or len(select_response.data) == 0:
+            raise HTTPException(status_code=500, detail="생성된 유저 조회에 실패했습니다.")
+
+        created_user = select_response.data[0]
+        
+        # 생성된 user 데이터 반환
+        return {"user": created_user}
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
