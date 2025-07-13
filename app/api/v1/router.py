@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import character, community, leaderboard, users, verification
+from app.api.v1.endpoints import character, community, leaderboard, users, verification, point
 
 router = APIRouter()
 router.include_router(character.router, prefix="/character")
@@ -7,3 +7,4 @@ router.include_router(community.router, prefix="/community")
 router.include_router(leaderboard.router, prefix="/leaderboard")
 router.include_router(users.router, prefix="/users")
 router.include_router(verification.router, prefix="/verification")
+router.include_router(point.router, prefix="/point")
