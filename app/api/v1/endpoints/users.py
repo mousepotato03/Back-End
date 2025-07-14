@@ -3,7 +3,7 @@ from uuid import UUID
 from app.services.user.get_user import get_user_info
 from app.services.user.update_user import update_user_info
 from app.services.user.delete_user import delete_user_info
-from app.services.user.create_users import create_user
+from app.services.user.create_user import create_user_info
 
 router = APIRouter()
 
@@ -13,7 +13,7 @@ async def create_user(user_data: dict):
     새로운 사용자를 생성합니다.
     """
     try:
-        return await create_user(user_data)
+        return await create_user_info(user_data)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
