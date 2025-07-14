@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from typing import Optional
 from app.services.community.get_post import get_posts
 from app.services.community.create_post import create_post
 from app.services.community.update_post import update_post
@@ -15,12 +16,16 @@ router = APIRouter()
 # --- START: 게시글 API ---
 # -------------------------
 @router.get("/posts")
-async def get_community_posts(offset: int):
+async def get_community_posts(offset: int, user_id: Optional[str] = None):
     """
     커뮤니티 게시글 목록을 가져옵니다.
+    
+    Parameters:
+    - offset (int): 페이지네이션을 위한 시작 인덱스 (필수)
+    - user_id (str, optional): 특정 사용자의 게시글만 필터링하고 싶을 때 사용
     """
     try:
-        return await get_posts(offset=offset)
+        return await get_posts(offset=offset, user_id=user_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
