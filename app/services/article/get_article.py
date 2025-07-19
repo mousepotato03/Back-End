@@ -40,7 +40,7 @@ async def get_article_with_concepts():
     
     client = genai.Client()
     response = client.models.generate_content(
-        model="gemini-2.5-flash", 
+        model="gemini-2.5-pro", 
         contents="Generate the content package now.", # 명시적 명령
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
