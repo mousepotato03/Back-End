@@ -1,6 +1,7 @@
 from google import genai
 from google.genai import types
 from app.core.config import get_gemini_api_key
+import json
 
 # O/X 퀴즈 응답을 위한 JSON 스키마 정의
 quiz_ox_response_schema = types.Schema(
@@ -32,7 +33,7 @@ async def create_OX_quiz():
         api_key = get_gemini_api_key()
         client = genai.Client(api_key=api_key)
         response = client.models.generate_content(
-            model="gemini-2.5-flash", 
+            model="gemini-2.5-pro", 
             contents="Generate one O/X quiz now.",
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
@@ -40,6 +41,7 @@ async def create_OX_quiz():
                 system_instruction=system_prompt
             ),
         )
-        return response.text
+        # 문자열을 JSON으로 파싱하여 반환
+        return json.loads(response.text)
     except Exception as e:
         raise Exception(f"퀴즈 생성 중 오류가 발생했습니다: {str(e)}")
